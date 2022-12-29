@@ -11,16 +11,16 @@ import PySimpleGUI as GUI
 def generateGraphFile(xData, yData, observation):  #takes in x and y data obeseravtion = What the data stands for
     plottingDict = {tuple(xData): yData}  #Creats a dict with the xData as the key and the yData as value, creating a and y data pair
     for i in plottingDict: #plots the x and y cordinates
-        plt.ticklabel_format(useOffset=False, style="plain")
+        plt.ticklabel_format(useOffset=False, style="plain") #For the program to show the whole y-axis
         plt.plot(i, plottingDict[i])
     plt.xlabel("year")
-    plt.ylabel(" "+observation)
+
+    plt.show()
     plt.savefig("SCB_DATA_" + observation.replace(" ", "_").upper() + ".png") # formating for the file name and saves the file as a png
     plt.close() #closes the window
 
 
 def generateGraphData(scb, valueIndex, keyIndex):  #Scrapar scb hemsidan
-    scbData = []
     scbData = scb.get_data()
     # Filter out metadata:
     scbFetchData = scbData['data']
@@ -53,7 +53,7 @@ generateGraphFile(xData, yData, "Passenger car in use")
 def generateGraphicalInterface():
 
     fullLayout = [[GUI.Button("next", visible=True,key='-NXT-'), GUI.Button("previous", visible=False, key='-prev-')],  #Creats a deafualt layout for the GUI
-                  [GUI.Image(filename="SCB_DATA_POPULATION.png", size=(640,480), key='-IMG-')], [GUI.Button("close window")]] #Consists of two bottons and a image element
+                  [GUI.Image(filename="SCB_DATA_POPULATION.png", size=(1200,700), key='-IMG-')], [GUI.Button("close window")]] #Consists of two bottons and a image element
 
     window = GUI.Window("hello world", fullLayout, size=(500, 500), resizable=True) #Creats the window
     while True:  #_____event loop________
