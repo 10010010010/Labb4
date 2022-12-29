@@ -8,18 +8,18 @@ import PySimpleGUI as GUI
 
 
 # Du skall skapa funktionens parameterlista:
-def generateGraphFile(xData, yData, observation: str):
-    plottingDict = {tuple(xData): yData}
-    for i in plottingDict:
+def generateGraphFile(xData, yData, observation):  #takes in x and y data obeseravtion = What the data stands for
+    plottingDict = {tuple(xData): yData}  #Creats a dict with the xData as the key and the yData as value, creating a and y data pair
+    for i in plottingDict: #plots the x and y cordinates
         plt.ticklabel_format(useOffset=False, style="plain")
         plt.plot(i, plottingDict[i])
     plt.xlabel("year")
-    plt.ylabel(observation)
-    plt.savefig("SCB_DATA_" + observation.replace(" ", "_").upper() + ".png")
-    plt.close()
+    plt.ylabel(" "+observation)
+    plt.savefig("SCB_DATA_" + observation.replace(" ", "_").upper() + ".png") # formating for the file name and saves the file as a png
+    plt.close() #closes the window
 
 
-def generateGraphData(scb, valueIndex, keyIndex):
+def generateGraphData(scb, valueIndex, keyIndex):  #Scrapar scb hemsidan
     scbData = []
     scbData = scb.get_data()
     # Filter out metadata:
@@ -47,29 +47,29 @@ scb.set_query(region=["Sweden"], observations="Passenger cars in use", year=
 ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020",
  "2021"])
 xData, yData = generateGraphData(scb, 0, 1)
-generateGraphFile(xData, yData, "Passenger car in use")  # här sker anropet till funktionen som du skriver färdigt ovan.
+generateGraphFile(xData, yData, "Passenger car in use")
 
 
 def generateGraphicalInterface():
 
-    fullLayout = [[GUI.Button("next", visible=True,key='-NXT-'), GUI.Button("previous", visible=False, key='-prev-')],
-                  [GUI.Image(filename="SCB_DATA_POPULATION.png", size=(640,480), key='-IMG-')], [GUI.Button("close window")]]
+    fullLayout = [[GUI.Button("next", visible=True,key='-NXT-'), GUI.Button("previous", visible=False, key='-prev-')],  #Creats a deafualt layout for the GUI
+                  [GUI.Image(filename="SCB_DATA_POPULATION.png", size=(640,480), key='-IMG-')], [GUI.Button("close window")]] #Consists of two bottons and a image element
 
-    window = GUI.Window("hello world", fullLayout, size=(500, 500), resizable=True)
-    while True:
-        event, value = window.read()
-        if event == '-NXT-':
+    window = GUI.Window("hello world", fullLayout, size=(500, 500), resizable=True) #Creats the window
+    while True:  #_____event loop________
+        event, value = window.read() #creats two vital variables, event and value and maps them to the windows event and value
+        if event == '-NXT-':  # if event == "Next"; change image and visability of buttons
             window['-IMG-'].update(filename="SCB_DATA_PASSENGER_CAR_IN_USE.png")
-            window['-NXT-'].update(visible=False)
-            window['-prev-'].update(visible=True)
+            window['-NXT-'].update(visible=False)  #previously true
+            window['-prev-'].update(visible=True)  #previously false
         elif event == '-prev-':
-            window['-IMG-'].update(filename="SCB_DATA_POPULATION.png")
+            window['-IMG-'].update(filename="SCB_DATA_POPULATION.png") #if event == prevoius; change image, and switch visibliity of the buttons
             window['-prev-'].update(visible=False)
             window['-NXT-'].update(visible=True)
-        elif event == GUI.WIN_CLOSED or event == "close window":
+        elif event == GUI.WIN_CLOSED or event == "close window":  #if event == close window or the window if closed, exit event loop and window closes
             print("The window was closed")
             break
     window.close()
 
 
-generateGraphicalInterface()
+generateGraphicalInterface() # generates the GUI
