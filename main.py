@@ -9,13 +9,10 @@ import PySimpleGUI as GUI
 
 # Du skall skapa funktionens parameterlista:
 def generateGraphFile(xData, yData, observation):  #takes in x and y data obeseravtion = What the data stands for
-    plottingDict = {tuple(xData): yData}  #Creats a dict with the xData as the key and the yData as value, creating a and y data pair
-    for i in plottingDict: #plots the x and y cordinates
-        plt.ticklabel_format(useOffset=False, style="plain") #For the program to show the whole y-axis
-        plt.plot(i, plottingDict[i])
+    plt.ticklabel_format(useOffset=False, style="scientific") #For the program to show the whole y-axis
+    plt.plot(xData, yData)
     plt.xlabel("year")
-
-    plt.show()
+    plt.ylabel(observation)
     plt.savefig("SCB_DATA_" + observation.replace(" ", "_").upper() + ".png") # formating for the file name and saves the file as a png
     plt.close() #closes the window
 
@@ -33,27 +30,27 @@ def generateGraphData(scb, valueIndex, keyIndex):  #Scrapar scb hemsidan
     return xData, yData
 
 
-# Alternativ 1: Antal invånare i Sverige mellan 2010 och 2021
+#  Antal invånare i Sverige mellan 2010 och 2021
 scb = SCB('en', 'BE', 'BE0101', 'BE0101C', 'BefArealTathetKon')
 scb.set_query(observations=["Population"], year=
 ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020",
  "2021"])
 xData, yData = generateGraphData(scb, 0, 0)
-generateGraphFile(xData, yData, "population")
+generateGraphFile(xData, yData, "population") #generates graph 1
 
-# Alternativ 3: Antal registrerade personbilar i Sverige 2010-2021
+#  Antal registrerade personbilar i Sverige 2010-2021
 scb = SCB('en', 'TK', 'TK1001', 'TK1001A', 'PersBilarA')
 scb.set_query(region=["Sweden"], observations="Passenger cars in use", year=
 ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020",
  "2021"])
 xData, yData = generateGraphData(scb, 0, 1)
-generateGraphFile(xData, yData, "Passenger car in use")
+generateGraphFile(xData, yData, "Passenger car in use") #Generates graph 2
 
 
 def generateGraphicalInterface():
 
     fullLayout = [[GUI.Button("next", visible=True,key='-NXT-'), GUI.Button("previous", visible=False, key='-prev-')],  #Creats a deafualt layout for the GUI
-                  [GUI.Image(filename="SCB_DATA_POPULATION.png", size=(1200,700), key='-IMG-')], [GUI.Button("close window")]] #Consists of two bottons and a image element
+                  [GUI.Image(filename="SCB_DATA_POPULATION.png", key='-IMG-')], [GUI.Button("close window")]] #Consists of two bottons and a image element
 
     window = GUI.Window("hello world", fullLayout, size=(500, 500), resizable=True) #Creats the window
     while True:  #_____event loop________
