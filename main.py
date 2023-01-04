@@ -52,7 +52,7 @@ def generateGraphicalInterface():
     fullLayout = [[GUI.Button("next", visible=True,key='-NXT-'), GUI.Button("previous", visible=False, key='-prev-')],  #Creats a deafualt layout for the GUI
                   [GUI.Image(filename="SCB_DATA_POPULATION.png", key='-IMG-')], [GUI.Button("close window")]] #Consists of two bottons and a image element
 
-    window = GUI.Window("hello world", fullLayout, size=(500, 500), resizable=True) #Creats the window
+    window = GUI.Window("hello world", fullLayout, size=(500, 500), resizable=True,background_color="Green") #Creats the window
     while True:  #_____event loop________
         event, value = window.read() #creats two vital variables, event and value and maps them to the windows event and value
         if event == '-NXT-':  # if event == "Next"; change image and visability of buttons
